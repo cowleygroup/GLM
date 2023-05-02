@@ -65,18 +65,28 @@ class GLMModelClass:
 			weights[6][0,0] = mean_output_data
 			weights[7][0] = stddev_output_data
 			self.model.set_weights(weights)
+		
+		self.num_input_vars = num_input_vars
 
 
 	def train_model(self, X_train, y_train, num_passes=100):
 		# Trains GLM on training data
 		#
 		# INPUT:
-		#	X_train: (num_input_vars, num_training_samples), input data to train on (i.e., features)
+		#   X_train: (num_input_vars, num_training_samples), input data to train on (i.e., features)
 		#   y_train: (num_training_samples,), output data to train on (i.e., targets)
 		#	num_passes: (int), number of gradient steps to take on this batch of data
 		#
 		# OUTPUT:
 		#	None.  GLM's weights/predictions can be accessed after training.
+
+		# error checking
+		if X_train.shape[0] != num_input_vars:
+			raise ValueError('num input vars in X_train not equal to defined num input vars.')
+		elif y_train.ndims > 1:
+			raise ValueError('y_train should be a one-dimensional vector.')
+		elif X_train.shape[1] != y_train.size:
+			raise ValueError('X_train and y_train need to have the same number of samples.')
 
 		for ipass in range(num_passes):
 			self.model.train_on_batch(X_train.T, y_train)
