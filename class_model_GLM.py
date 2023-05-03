@@ -81,7 +81,7 @@ class GLMModelClass:
 		#	None.  GLM's weights/predictions can be accessed after training.
 
 		# error checking
-		if X_train.shape[0] != num_input_vars:
+		if X_train.shape[0] != self.num_input_vars:
 			raise ValueError('num input vars in X_train not equal to defined num input vars.')
 		elif y_train.ndims > 1:
 			raise ValueError('y_train should be a one-dimensional vector.')
