@@ -126,24 +126,37 @@ class GLMModelClass:
 		return np.squeeze(self.model.predict(X.T))
 
 
-	def compute_R2(self, y_hat, y_test):
+	def compute_R2(self, y_hat, y_test, flag_pearson=False):
 		# Computes prediction performance R2 between model predictions y_hat and real data y_test
 		#
 		# INPUT:
-		#	y_hat: (num_test_samples,), predicted output data from GLM; e.g., y_hat = GLM.get_predicted_output(X_test)
-		#	y_test: (num_test_samples,), output data held out from training
+		#   y_hat: (num_test_samples,), predicted output data from GLM; e.g., y_hat = GLM.get_predicted_output(X_test)
+		#   y_test: (num_test_samples,), output data held out from training
+		#   flag_pearson: (True or False), denotes if computing the coefficient of determination CoD (False) or
+		#	      squaring Pearson's correlation rho^2 (True).
+		#	      difference: CoD takes into account if y_hat's mean, std, and sign are different from y_test; rho^2 does not.
 		#
 		# OUTPUT:
-		#	R2: (scalar), prediction performance between y_hat and y_true
-		#		R2 --> 1 indicates the model has perfect prediction
-		#		R2 --> 0 indicates the model is a mismatch and/or features do not relate to y
-		#		R2 < 0 indicates truly poor prediction; this occurs when y_hat's mean or std dev is different from y_test,
-		#				y_hat and y_test are negatively correlated, etc.
+		#   R2: (scalar), prediction performance between y_hat and y_true
+		#	R2 --> 1 indicates the model has perfect prediction
+		#	R2 --> 0 indicates the model is a mismatch and/or features do not relate to y
+		#	R2 < 0 indicates truly poor prediction; this occurs when y_hat's mean or std dev is different from y_test,
+		#	     y_hat and y_test are negatively correlated, etc.
 
-		sumXY = np.sum((y_hat - y_test))**2
-		sumYY = np.sum((y_test - np.mean(y_test))**2)
+		# error checking
+		y_hat = np.squeeze(y_hat); y_test = np.squeeze(y_test)
+		if y_hat.ndim != 1 or y_test.ndim != 1:
+			raise ValueError('y_hat and y_test need to be one-dimensional vectors.')
+		elif y_hat.size != y_test.size:
+			raise ValueError('y_hat and y_test need to have the same number of samples.')
+			
+		if flag_pearson == False:
+			sumXY = np.sum((y_hat - y_test)**2)
+			sumYY = np.sum((y_test - np.mean(y_test))**2)
 
-		R2 = 1. - sumXY / sumYY
+			R2 = 1. - sumXY / sumYY
+		else:
+			R2 = np.corrcoef(y_hat, y_test)[0,1]**2
 		return R2
 
 
