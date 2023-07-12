@@ -83,7 +83,7 @@ class GLMModelClass:
 		# error checking
 		if X_train.shape[0] != self.num_input_vars:
 			raise ValueError('num input vars in X_train not equal to defined num input vars.')
-		elif y_train.ndims > 1:
+		elif y_train.ndim > 1:
 			raise ValueError('y_train should be a one-dimensional vector.')
 		elif X_train.shape[1] != y_train.size:
 			raise ValueError('X_train and y_train need to have the same number of samples.')
