@@ -37,8 +37,8 @@ class GLMModelClass:
 		#	num_input_vars: (int), number of input/feature variables for X
 		#	link_function: ('linear', 'relu', 'sigmoid'), defines the link/pointwise nonlinear/activation function between Beta^T * X and y
 		#	learning_rate: (float), learning rate for SGD
-		#	mean_output_data: (float), initializes the output offset to be equal to the mean(y_train); helps for optimization
-		#	stddev_output_data: (float), initializes the output standard deviation to be equal to stddev(y_train); helps for optimization
+		#	mean_output_data: (float), initial value for the output offset parameter (can be set to be equal the mean(y_train)); helps for optimization
+		#	stddev_output_data: (float), initial value for the output standard deviation (can be equal to stddev(y_train)); helps for optimization
 		#
 		# OUTPUT:
 		#	None.
